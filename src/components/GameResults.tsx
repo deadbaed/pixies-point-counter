@@ -1,26 +1,34 @@
 import { For, createMemo } from 'solid-js'
-import { game } from '../store/gameStore'
-import { calcPlayerTotal } from '../types'
+import { game, resetGame } from '../store/gameStore'
+import { calcRoundScore, calcPlayerTotal } from '../types'
+import { getRoundScores } from '../store/gameStore'
 
 export function GameResults() {
   const sortedPlayers = createMemo(() => {
     return [...game.players].sort((a, b) => {
-      const scoreA = calcPlayerTotal(a.id, game.scores)
-      const scoreB = calcPlayerTotal(b.id, game.scores)
-      return scoreB - scoreA // Descending order
+      const scoreA = calcPlayerTotal(a.id, getRoundScores())
+      const scoreB = calcPlayerTotal(b.id, getRoundScores())
+      return scoreB - scoreA
     })
   })
 
-  const getScore = (playerId: number) => calcPlayerTotal(playerId, game.scores)
+  const getPlayerTotal = (playerId: number) => {
+    return calcPlayerTotal(playerId, getRoundScores())
+  }
 
   const isWinner = (playerId: number) => {
-    const topScore = getScore(sortedPlayers()[0]?.id)
-    return getScore(playerId) === topScore && topScore > 0
+    const topScore = getPlayerTotal(sortedPlayers()[0]?.id)
+    return getPlayerTotal(playerId) === topScore && topScore > 0
+  }
+
+  const getRoundScore = (playerId: number, round: number) => {
+    const scores = getRoundScores().get(round)
+    const score = scores?.get(playerId)
+    return score ? calcRoundScore(round, score) : 0
   }
 
   function handleNewGame() {
-    // Reset to setup
-    window.location.reload()
+    resetGame()
   }
 
   return (
@@ -35,7 +43,7 @@ export function GameResults() {
                 {index() === 0 ? '🥇' : index() === 1 ? '🥈' : index() === 2 ? '🥉' : `${index() + 1}.`}
               </span>
               <span class="player-name">{player.name}</span>
-              <span class="final-score">{getScore(player.id)} pts</span>
+              <span class="final-score">{getPlayerTotal(player.id)} pts</span>
             </div>
           )}
         </For>
@@ -49,17 +57,12 @@ export function GameResults() {
               <h3>Round {round}</h3>
               <div class="round-players">
                 <For each={game.players}>
-                  {(player) => {
-                    const roundScore = game.scores.find(
-                      s => s.playerId === player.id && s.round === round
-                    )
-                    return (
-                      <div class="round-score-item">
-                        <span>{player.name}</span>
-                        <span>{roundScore?.total ?? 0}</span>
-                      </div>
-                    )
-                  }}
+                  {(player) => (
+                    <div class="round-score-item">
+                      <span>{player.name}</span>
+                      <span>{getRoundScore(player.id, round)}</span>
+                    </div>
+                  )}
                 </For>
               </div>
             </div>

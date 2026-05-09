@@ -1,28 +1,13 @@
 import { For, Show } from 'solid-js'
-import { game, setLastFinisher, startPlayerTurn } from '../store/gameStore'
-import { calcPlayerTotal } from '../types'
+import { game, setLastFinisher, startRound } from '../store/gameStore'
 
 export function RoundStart() {
-  const currentPlayer = () => game.players[game.currentPlayerIndex]
-
   function handleLastFinisher(playerId: number) {
     setLastFinisher(playerId)
   }
 
-  function handleStartTurn() {
-    startPlayerTurn()
-  }
-
-  function handleNextStep() {
-    if (game.lastFinisherId === null) {
-      handleStartTurn()
-    }
-  }
-
-  // Get scores so far for display
-  const getPlayerScore = (id: number) => {
-    const total = calcPlayerTotal(id, game.scores)
-    return total > 0 ? `(${total} pts)` : ''
+  function handleStartRound() {
+    startRound()
   }
 
   return (
@@ -31,13 +16,10 @@ export function RoundStart() {
         Round {game.currentRound} / 3
       </div>
 
-      <div class="current-player">
-        <h2>{currentPlayer()?.name}'s Turn</h2>
-      </div>
-
-      <Show when={game.lastFinisherId !== null}>
+      <Show when={game.lastFinisherId === null}>
         <div class="last-finisher">
-          <p>Who finished last this round?</p>
+          <h2>Who finished last?</h2>
+          <p>This player will start the next round</p>
           <div class="player-buttons">
             <For each={game.players}>
               {(player) => (
@@ -46,7 +28,6 @@ export function RoundStart() {
                   onClick={() => handleLastFinisher(player.id)}
                 >
                   {player.name}
-                  <span class="score-hint">{getPlayerScore(player.id)}</span>
                 </button>
               )}
             </For>
@@ -54,10 +35,14 @@ export function RoundStart() {
         </div>
       </Show>
 
-      <Show when={game.lastFinisherId === null}>
-        <button class="start-turn-btn" onClick={handleNextStep}>
-          Begin Round {game.currentRound}
-        </button>
+      <Show when={game.lastFinisherId !== null}>
+        <div class="round-ready">
+          <h2>Round {game.currentRound} Ready</h2>
+          <p>Last finisher: <strong>{game.players.find(p => p.id === game.lastFinisherId)?.name}</strong></p>
+          <button class="start-turn-btn" onClick={handleStartRound}>
+            Start Entering Scores
+          </button>
+        </div>
       </Show>
     </div>
   )

@@ -7,44 +7,29 @@ export type Player = {
 
 // ============ Game State ============
 
-export type GamePhase = 'setup' | 'round-start' | 'cards' | 'symbols' | 'zone' | 'confirm' | 'results'
+export type GamePhase = 'setup' | 'round-start' | 'round-input' | 'round-review' | 'results'
 
 export type GameState = {
   phase: GamePhase
   players: Player[]
-  currentRound: number        // 1, 2, or 3
-  currentPlayerIndex: number  // index in players array
+  currentRound: number      // 1, 2, or 3
   lastFinisherId: number | null
-  scores: PlayerRoundScore[]
+  playerScores: Map<number, PlayerRoundScore>  // key: playerId
 }
 
 // ============ Scoring ============
 
 export type PlayerRoundScore = {
   playerId: number
-  round: number
-  validatedCards: number[]  // e.g., [1, 5, 9]
+  validatedCards: number[]
   spirals: number
   crosses: number
   biggestZone: number
-  total: number
 }
 
-// ============ Helpers ============
+// ============ Pure Functions ============
 
-export function getInitialRoundScore(playerId: number, round: number): PlayerRoundScore {
-  return {
-    playerId,
-    round,
-    validatedCards: [],
-    spirals: 0,
-    crosses: 0,
-    biggestZone: 0,
-    total: 0,
-  }
-}
-
-export function calcRoundScore(round: number, data: Omit<PlayerRoundScore, 'playerId' | 'round' | 'total'>): number {
+export function calcRoundScore(round: number, data: PlayerRoundScore): number {
   const cardsSum = data.validatedCards.reduce((a, b) => a + b, 0)
   const spiralScore = data.spirals * 1
   const crossScore = data.crosses * -1
@@ -54,12 +39,34 @@ export function calcRoundScore(round: number, data: Omit<PlayerRoundScore, 'play
   return cardsSum + spiralScore + crossScore + zoneScore
 }
 
-export function calcPlayerTotal(playerId: number, allScores: PlayerRoundScore[]): number {
-  return allScores
-    .filter(s => s.playerId === playerId)
-    .reduce((sum, s) => sum + s.total, 0)
+export function getTotalScore(
+  playerId: number,
+  allRounds: Map<number, Map<number, PlayerRoundScore>>,
+  round: number
+): number {
+  const roundScores = allRounds.get(round)
+  if (!roundScores) return 0
+  const score = roundScores.get(playerId)
+  return score ? calcRoundScore(round, score) : 0
 }
 
-export function getPlayerById(id: number, players: Player[]): Player | undefined {
-  return players.find(p => p.id === id)
+export function calcPlayerTotal(
+  playerId: number,
+  allRounds: Map<number, Map<number, PlayerRoundScore>>
+): number {
+  let total = 0
+  allRounds.forEach((_, round) => {
+    total += getTotalScore(playerId, allRounds, round)
+  })
+  return total
+}
+
+export function getInitialScore(playerId: number): PlayerRoundScore {
+  return {
+    playerId,
+    validatedCards: [],
+    spirals: 0,
+    crosses: 0,
+    biggestZone: 0,
+  }
 }

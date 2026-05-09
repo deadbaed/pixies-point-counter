@@ -2,10 +2,8 @@ import { Switch, Match } from 'solid-js'
 import { game } from './store/gameStore'
 import { Setup } from './components/Setup'
 import { RoundStart } from './components/RoundStart'
-import { CardGrid } from './components/CardGrid'
-import { SymbolInput } from './components/SymbolInput'
-import { BiggestZone } from './components/BiggestZone'
-import { ConfirmScore } from './components/ConfirmScore'
+import { RoundInput } from './components/RoundInput'
+import { RoundReview } from './components/RoundReview'
 import { GameResults } from './components/GameResults'
 import './style.css'
 
@@ -21,20 +19,12 @@ export function App() {
           <RoundStart />
         </Match>
 
-        <Match when={game.phase === 'cards'}>
-          <CardGrid />
+        <Match when={game.phase === 'round-input'}>
+          <RoundInput />
         </Match>
 
-        <Match when={game.phase === 'symbols'}>
-          <SymbolInput />
-        </Match>
-
-        <Match when={game.phase === 'zone'}>
-          <BiggestZone />
-        </Match>
-
-        <Match when={game.phase === 'confirm'}>
-          <ConfirmScore />
+        <Match when={game.phase === 'round-review'}>
+          <RoundReview />
         </Match>
 
         <Match when={game.phase === 'results'}>

@@ -210,47 +210,275 @@ body {
 
 /* ============ Navigation ============ */
 
-.next-btn, .back-btn {
-  padding: 12px 20px;
-  border: none;
+/* ============ Round Input ============ */
+
+.round-input h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.player-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.player-tab {
+  flex: 1;
+  min-width: 80px;
+  padding: 12px;
+  background: #16213e;
+  border: 2px solid #333;
   border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
+  color: #aaa;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.next-btn {
+.player-tab:hover {
+  border-color: #e94560;
+}
+
+.player-tab.active {
   background: #e94560;
+  border-color: #e94560;
   color: #fff;
-  width: 100%;
-  margin-top: 20px;
 }
 
-.next-btn:hover {
-  background: #ff6b81;
+.score-input-section {
+  background: #16213e;
+  border-radius: 10px;
+  padding: 20px;
 }
 
-.symbol-input .actions, .biggest-zone .actions {
+.score-input-section h4 {
+  text-align: center;
+  color: #e94560;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group > label {
+  display: block;
+  margin-bottom: 10px;
+  color: #aaa;
+}
+
+.input-hint {
+  display: block;
+  text-align: right;
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.card-btn {
+  aspect-ratio: 1;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: #0f3460;
+  border: 2px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card-btn:hover {
+  border-color: #e94560;
+}
+
+.card-btn.selected {
+  background: #e94560;
+  border-color: #e94560;
+}
+
+.symbol-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.symbol-group {
+  flex: 1;
+  background: #0f3460;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.symbol-group span {
+  display: block;
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.symbol-net {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px;
+  background: #0f3460;
+  border-radius: 8px;
+}
+
+.symbol-net.positive {
+  color: #2ed573;
+}
+
+.symbol-net.negative {
+  color: #ff4757;
+}
+
+.zone-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.zone-row input {
+  flex: 1;
+  max-width: 100px;
+  padding: 10px;
+  font-size: 1.2rem;
+  text-align: center;
+  background: #0f3460;
+  border: 2px solid #333;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.zone-row input:focus {
+  outline: none;
+  border-color: #e94560;
+}
+
+.zone-preview {
+  color: #2ed573;
+  font-weight: bold;
+}
+
+/* ============ Round Review ============ */
+
+.round-review h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.scores-table {
+  background: #16213e;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr 1fr;
+  padding: 12px 15px;
+  background: #0f3460;
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr 1fr;
+  padding: 12px 15px;
+  border-bottom: 1px solid #333;
+  font-size: 0.9rem;
+}
+
+.score-row:last-child {
+  border-bottom: none;
+}
+
+.score-row .player-name {
+  font-weight: bold;
+  color: #e94560;
+}
+
+.score-row .total {
+  font-weight: bold;
+  color: #2ed573;
+}
+
+/* ============ Actions ============ */
+
+.actions {
   display: flex;
   gap: 10px;
   margin-top: 20px;
 }
 
-.symbol-input .actions .back-btn,
-.biggest-zone .actions .back-btn {
+.back-btn {
   flex: 1;
+  padding: 15px;
   background: #333;
+  border: none;
+  border-radius: 10px;
   color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
-.symbol-input .actions .next-btn,
-.biggest-zone .actions .next-btn {
+.back-btn:hover {
+  background: #444;
+}
+
+.next-btn, .confirm-btn {
   flex: 2;
+  padding: 15px;
   background: #e94560;
+  border: none;
+  border-radius: 10px;
   color: #fff;
-  width: auto;
-  margin-top: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.next-btn:hover, .confirm-btn:hover {
+  background: #ff6b81;
+}
+
+.confirm-btn {
+  background: #2ed573;
+  color: #1a1a2e;
+}
+
+.confirm-btn:hover {
+  background: #7bed9f;
+}
+
+/* ============ Round Ready ============ */
+
+.round-ready {
+  text-align: center;
+}
+
+.round-ready h2 {
+  margin-bottom: 10px;
+}
+
+.round-ready p {
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.round-ready strong {
+  color: #e94560;
 }
 
 /* ============ Card Grid ============ */
