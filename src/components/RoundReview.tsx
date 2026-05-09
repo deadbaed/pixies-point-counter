@@ -1,13 +1,17 @@
 import { For } from 'solid-js'
 import { game, goToPhase, confirmRound } from '../store/gameStore'
-import { calcRoundScore, sumCards } from '../types'
+import { calcRoundScore, sumCards, calcPlayerTotal } from '../types'
 import { getRoundScores } from '../store/gameStore'
 
 export function RoundReview() {
-  function getScore(playerId: number) {
+  function getRoundScore(playerId: number) {
     const scores = getRoundScores().get(game.currentRound)
     const score = scores?.get(playerId)
     return score ? calcRoundScore(game.currentRound, score) : 0
+  }
+
+  const getTotalSoFar = (playerId: number) => {
+    return calcPlayerTotal(playerId, getRoundScores())
   }
 
   const nextRoundStarter = () => {
@@ -51,8 +55,12 @@ export function RoundReview() {
                   </div>
                 </div>
                 <div class="review-total">
-                  <span class="total-label">Total</span>
-                  <span class="total-value">{getScore(player.id)}</span>
+                  <span class="total-label">Round {game.currentRound}</span>
+                  <span class="total-value">+{getRoundScore(player.id)}</span>
+                </div>
+                <div class="review-grand-total">
+                  <span class="grand-label">Total</span>
+                  <span class="grand-value">{getTotalSoFar(player.id)} pts</span>
                 </div>
               </div>
             )

@@ -447,6 +447,26 @@ body {
 }
 
 .total-value {
+  font-weight: bold;
+  color: #e94560;
+}
+
+.review-grand-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #0f3460;
+  border-radius: 8px;
+  margin-top: 5px;
+}
+
+.grand-label {
+  font-weight: bold;
+  color: #aaa;
+}
+
+.grand-value {
   font-size: 1.2rem;
   font-weight: bold;
   color: #2ed573;
