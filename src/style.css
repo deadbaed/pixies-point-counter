@@ -373,43 +373,81 @@ body {
 
 .round-review h3 {
   text-align: center;
+  margin-bottom: 15px;
+}
+
+.next-starter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #0f3460;
+  border-radius: 10px;
   margin-bottom: 20px;
 }
 
-.scores-table {
-  background: #16213e;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.table-header {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr 1fr;
-  padding: 12px 15px;
-  background: #0f3460;
-  font-weight: bold;
-  font-size: 0.8rem;
-  color: #aaa;
-}
-
-.score-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr 1fr;
-  padding: 12px 15px;
-  border-bottom: 1px solid #333;
+.starter-label {
+  color: #888;
   font-size: 0.9rem;
 }
 
-.score-row:last-child {
-  border-bottom: none;
-}
-
-.score-row .player-name {
+.starter-name {
   font-weight: bold;
   color: #e94560;
 }
 
-.score-row .total {
+.review-players {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.review-player-card {
+  background: #16213e;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.review-player-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #e94560;
+  margin-bottom: 10px;
+}
+
+.review-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.review-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.review-row span:first-child {
+  color: #888;
+}
+
+.review-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #333;
+}
+
+.total-label {
+  font-weight: bold;
+  color: #aaa;
+}
+
+.total-value {
+  font-size: 1.2rem;
   font-weight: bold;
   color: #2ed573;
 }

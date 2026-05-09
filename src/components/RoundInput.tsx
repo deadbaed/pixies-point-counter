@@ -1,5 +1,6 @@
 import { createSignal, For, createMemo } from 'solid-js'
 import { game, getPlayerScore, updatePlayerScore, goToReview, goToPhase } from '../store/gameStore'
+import { sumCards } from '../types'
 
 const CARDS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -43,7 +44,7 @@ export function RoundInput() {
     goToReview()
   }
 
-  const cardsSum = () => activeScore().validatedCards.reduce((a, b) => a + b, 0)
+  const cardsSum = () => sumCards(activeScore().validatedCards)
   const zonePreview = () => activeScore().biggestZone * (game.currentRound + 1)
   const symbolNet = () => activeScore().spirals - activeScore().crosses
 

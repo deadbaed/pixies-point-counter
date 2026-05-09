@@ -29,8 +29,12 @@ export type PlayerRoundScore = {
 
 // ============ Pure Functions ============
 
+export function sumCards(cards: number[]): number {
+  return cards.reduce((a, b) => a + b, 0)
+}
+
 export function calcRoundScore(round: number, data: PlayerRoundScore): number {
-  const cardsSum = data.validatedCards.reduce((a, b) => a + b, 0)
+  const cardsSum = sumCards(data.validatedCards)
   const spiralScore = data.spirals * 1
   const crossScore = data.crosses * -1
   const zoneMultiplier = round + 1  // round 1 → ×2, round 2 → ×3, round 3 → ×4
