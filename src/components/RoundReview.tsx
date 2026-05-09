@@ -1,4 +1,4 @@
-import { For } from 'solid-js'
+import { For, Show } from 'solid-js'
 import { game, goToPhase, confirmRound } from '../store/gameStore'
 import { calcRoundScore, sumCards, calcPlayerTotal } from '../types'
 import { getRoundScores } from '../store/gameStore'
@@ -15,7 +15,6 @@ export function RoundReview() {
   }
 
   const nextRoundStarter = () => {
-    if (!game.lastFinisherId) return null
     return game.players.find(p => p.id === game.lastFinisherId)
   }
 
@@ -23,10 +22,12 @@ export function RoundReview() {
     <div class="round-review">
       <h3>Round {game.currentRound}</h3>
 
-      <div class="next-starter">
-        <span class="starter-label">Next round starts:</span>
-        <span class="starter-name">{nextRoundStarter()?.name}</span>
-      </div>
+      <Show when={game.currentRound < 3}>
+        <div class="next-starter">
+          <span class="starter-label">Next round starts:</span>
+          <span class="starter-name">{nextRoundStarter()?.name}</span>
+        </div>
+      </Show>
 
       <div class="review-players">
         <For each={game.players}>

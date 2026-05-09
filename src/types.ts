@@ -1,22 +1,3 @@
-// ============ Player ============
-
-export type Player = {
-  id: number
-  name: string
-}
-
-// ============ Game State ============
-
-export type GamePhase = 'setup' | 'round-start' | 'round-input' | 'round-review' | 'results'
-
-export type GameState = {
-  phase: GamePhase
-  players: Player[]
-  currentRound: number      // 1, 2, or 3
-  lastFinisherId: number | null
-  playerScores: Map<number, PlayerRoundScore>  // key: playerId
-}
-
 // ============ Scoring ============
 
 export type PlayerRoundScore = {

@@ -1,4 +1,4 @@
-import { createSignal, For, createMemo } from 'solid-js'
+import { createSignal, For } from 'solid-js'
 import { game, getPlayerScore, updatePlayerScore, goToReview, goToPhase } from '../store/gameStore'
 import { sumCards } from '../types'
 
@@ -6,9 +6,19 @@ const CARDS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 export function RoundInput() {
   const [activePlayerId, setActivePlayerId] = createSignal(game.players[0]?.id ?? -1)
+  const [tick, setTick] = createSignal(0)
 
   const activePlayer = () => game.players.find(p => p.id === activePlayerId())
-  const activeScore = createMemo(() => getPlayerScore(activePlayerId()))
+  
+  // Force re-render by reading tick
+  const activeScore = () => {
+    tick() // this will trigger re-computation when tick changes
+    return getPlayerScore(activePlayerId())
+  }
+
+  function refresh() {
+    setTick(t => t + 1)
+  }
 
   function isCardSelected(card: number) {
     return activeScore().validatedCards.includes(card)
@@ -20,20 +30,24 @@ export function RoundInput() {
       ? current.filter(c => c !== card)
       : [...current, card]
     updatePlayerScore(activePlayerId(), { validatedCards: newCards })
+    refresh()
   }
 
   function updateSpirals(delta: number) {
     updatePlayerScore(activePlayerId(), { spirals: Math.max(0, activeScore().spirals + delta) })
+    refresh()
   }
 
   function updateCrosses(delta: number) {
     updatePlayerScore(activePlayerId(), { crosses: Math.max(0, activeScore().crosses + delta) })
+    refresh()
   }
 
   function updateZone(e: InputEvent) {
     const input = e.currentTarget as HTMLInputElement
     const value = parseInt(input.value) || 0
     updatePlayerScore(activePlayerId(), { biggestZone: Math.max(0, value) })
+    refresh()
   }
 
   function handleBack() {
@@ -58,7 +72,10 @@ export function RoundInput() {
           {(player) => (
             <button
               class={`player-tab ${activePlayerId() === player.id ? 'active' : ''}`}
-              onClick={() => setActivePlayerId(player.id)}
+              onClick={() => {
+                setActivePlayerId(player.id)
+                refresh()
+              }}
             >
               {player.name}
             </button>

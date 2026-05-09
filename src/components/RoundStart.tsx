@@ -16,10 +16,10 @@ export function RoundStart() {
         Round {game.currentRound} / 3
       </div>
 
-      <Show when={game.lastFinisherId === null}>
+      <Show when={game.currentRound < 3}>
         <div class="last-finisher">
           <h2>Who finished last?</h2>
-          <p>This player will start the next round</p>
+          <p>This player will start round {game.currentRound + 1}</p>
           <div class="player-buttons">
             <For each={game.players}>
               {(player) => (
@@ -35,10 +35,10 @@ export function RoundStart() {
         </div>
       </Show>
 
-      <Show when={game.lastFinisherId !== null}>
+      <Show when={game.currentRound === 3}>
         <div class="round-ready">
-          <h2>Round {game.currentRound} Ready</h2>
-          <p>Last finisher: <strong>{game.players.find(p => p.id === game.lastFinisherId)?.name}</strong></p>
+          <h2>Final Round!</h2>
+          <p>Last chance to score points</p>
           <button class="start-turn-btn" onClick={handleStartRound}>
             Start Entering Scores
           </button>

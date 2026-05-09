@@ -1,82 +1,79 @@
-import { createSignal } from 'solid-js'
-import type { GameState, PlayerRoundScore } from '../types'
+import { createStore } from 'solid-js/store'
+import type { PlayerRoundScore } from '../types'
 import { getInitialScore } from '../types'
 
 // ============ All rounds stored here ============
 const allRounds = new Map<number, Map<number, PlayerRoundScore>>()
 
-// ============ Reactive signal for current round scores ============
-const [currentRoundScores, setCurrentRoundScores] = createSignal<Map<number, PlayerRoundScore>>(new Map())
-
 // ============ Game State ============
 
 type Phase = 'setup' | 'round-start' | 'round-input' | 'round-review' | 'results'
 
-const [state, setState] = createSignal({
-  phase: 'setup' as Phase,
-  players: [] as { id: number; name: string }[],
+type Player = {
+  id: number
+  name: string
+}
+
+type GameState = {
+  phase: Phase
+  players: Player[]
+  currentRound: number
+  lastFinisherId: number | null
+}
+
+const [game, setGame] = createStore<GameState>({
+  phase: 'setup',
+  players: [],
   currentRound: 1,
-  lastFinisherId: null as number | null,
+  lastFinisherId: null,
 })
 
 // ============ Phase Transitions ============
 
 export function goToPhase(phase: Phase) {
-  setState(s => ({ ...s, phase }))
-}
-
-export function getPhase(): Phase {
-  return state().phase
+  setGame('phase', phase)
 }
 
 // ============ Player Management ============
 
 export function addPlayer(name: string) {
-  const id = state().players.length
-  setState(s => ({
-    ...s,
-    players: [...s.players, { id, name }],
-  }))
+  const id = game.players.length
+  setGame('players', players => [...players, { id, name }])
 }
 
 export function removePlayer(id: number) {
-  setState(s => ({
-    ...s,
-    players: s.players.filter(p => p.id !== id),
-  }))
+  setGame('players', players => players.filter(p => p.id !== id))
 }
 
 export function canStartGame(): boolean {
-  return state().players.length >= 2
+  return game.players.length >= 2
 }
 
 export function startGame() {
   if (!canStartGame()) return
   allRounds.clear()
   initRoundScores(1)
-  setState(s => ({
-    ...s,
+  const currentPlayers = [...game.players]
+  setGame({
     phase: 'round-start',
+    players: currentPlayers,
     currentRound: 1,
     lastFinisherId: null,
-  }))
+  })
 }
 
 // ============ Round Scores ============
 
 function initRoundScores(round: number) {
   const roundScores = new Map<number, PlayerRoundScore>()
-  state().players.forEach(player => {
+  game.players.forEach(player => {
     roundScores.set(player.id, getInitialScore(player.id))
   })
   allRounds.set(round, roundScores)
-  setCurrentRoundScores(new Map(roundScores))
 }
 
 export function getPlayerScore(playerId: number): PlayerRoundScore {
-  // Read from the reactive signal to track dependencies
-  currentRoundScores()
-  const roundScores = allRounds.get(state().currentRound)
+  const roundScores = allRounds.get(game.currentRound)
   if (roundScores) {
     const score = roundScores.get(playerId)
     if (score) return score
@@ -85,12 +82,11 @@ export function getPlayerScore(playerId: number): PlayerRoundScore {
 }
 
 export function getCurrentRoundScores(): Map<number, PlayerRoundScore> {
-  currentRoundScores() // track dependency
-  return allRounds.get(state().currentRound) ?? new Map()
+  return allRounds.get(game.currentRound) ?? new Map()
 }
 
 export function updatePlayerScore(playerId: number, updates: Partial<PlayerRoundScore>) {
-  const roundScores = allRounds.get(state().currentRound)
+  const roundScores = allRounds.get(game.currentRound)
   if (!roundScores) return
 
   const current = getPlayerScore(playerId)
@@ -100,42 +96,39 @@ export function updatePlayerScore(playerId: number, updates: Partial<PlayerRound
   }
 
   roundScores.set(playerId, newScore)
-  // Update reactive signal to trigger re-renders
-  setCurrentRoundScores(new Map(roundScores))
 }
 
 // ============ Navigation ============
 
 export function setLastFinisher(playerId: number) {
-  setState(s => ({ ...s, lastFinisherId: playerId, phase: 'round-input' }))
+  // This player finished last round - they start this round
+  setGame('lastFinisherId', playerId)
+  setGame('phase', 'round-input')
 }
 
 export function startRound() {
-  setState(s => ({ ...s, phase: 'round-input' }))
+  setGame('phase', 'round-input')
 }
 
 export function goToReview() {
-  setState(s => ({ ...s, phase: 'round-review' }))
+  setGame('phase', 'round-review')
 }
 
 export function confirmRound() {
-  if (state().currentRound >= 3) {
-    setState(s => ({ ...s, phase: 'results' }))
+  if (game.currentRound >= 3) {
+    setGame('phase', 'results')
   } else {
-    const nextRound = state().currentRound + 1
+    const nextRound = game.currentRound + 1
     initRoundScores(nextRound)
-    setState(s => ({
-      ...s,
-      currentRound: nextRound,
-      lastFinisherId: null,
-      phase: 'round-start',
-    }))
+    setGame('currentRound', nextRound)
+    // lastFinisherId stays - will be shown at start of next round
+    setGame('phase', 'round-start')
   }
 }
 
 export function resetGame() {
   allRounds.clear()
-  setState({
+  setGame({
     phase: 'setup',
     players: [],
     currentRound: 1,
@@ -149,26 +142,5 @@ export function getRoundScores() {
   return allRounds
 }
 
-// ============ Reactive store (proxy for easy access) ============
-
-// Create a reactive proxy that wraps the state signal
-const gameProxy = new Proxy({} as GameState, {
-  get(_, prop: keyof GameState) {
-    const s = state()
-    switch (prop) {
-      case 'phase': return s.phase
-      case 'players': return s.players
-      case 'currentRound': return s.currentRound
-      case 'lastFinisherId': return s.lastFinisherId
-      case 'playerScores': return currentRoundScores()
-      default: return undefined
-    }
-  },
-  set(_, prop: keyof GameState, value) {
-    if (prop === 'phase') setState(s => ({ ...s, phase: value as Phase }))
-    else if (prop === 'lastFinisherId') setState(s => ({ ...s, lastFinisherId: value as number | null }))
-    return true
-  }
-})
-
-export { gameProxy as game }
+// Re-export for convenience
+export { game }
