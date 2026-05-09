@@ -1,0 +1,27 @@
+ask names of players (minimum 2, maximum 5)
+
+for every round:
+
+0. need to ask who finished last, that player will start next round
+
+1. ask number of validated cards
+
+down the line, ask which cards are validated (from 1 to 9)
+put them in a grid and have a checkbox
+
+2. number of spirals and crosses
+
+spirals are *1
+crosses are *-1
+
+3. ask biggest zone of same color
+
+*2 for round 1
+*3 for round 2
+*4 for round 3
+
+4. sum everything
+
+at the end, sum all 3 rounds
+
+
