@@ -1,49 +1,49 @@
 // ============ Scoring ============
 
 export type PlayerRoundScore = {
-  playerId: number
-  validatedCards: number[]
-  spirals: number
-  crosses: number
-  biggestZone: number
-}
+  playerId: number;
+  validatedCards: number[];
+  spirals: number;
+  crosses: number;
+  biggestZone: number;
+};
 
 // ============ Pure Functions ============
 
 export function sumCards(cards: number[]): number {
-  return cards.reduce((a, b) => a + b, 0)
+  return cards.reduce((a, b) => a + b, 0);
 }
 
 export function calcRoundScore(round: number, data: PlayerRoundScore): number {
-  const cardsSum = sumCards(data.validatedCards)
-  const spiralScore = data.spirals * 1
-  const crossScore = data.crosses * -1
-  const zoneMultiplier = round + 1  // round 1 → ×2, round 2 → ×3, round 3 → ×4
-  const zoneScore = data.biggestZone * zoneMultiplier
+  const cardsSum = sumCards(data.validatedCards);
+  const spiralScore = data.spirals * 1;
+  const crossScore = data.crosses * -1;
+  const zoneMultiplier = round + 1; // round 1 → ×2, round 2 → ×3, round 3 → ×4
+  const zoneScore = data.biggestZone * zoneMultiplier;
 
-  return cardsSum + spiralScore + crossScore + zoneScore
+  return cardsSum + spiralScore + crossScore + zoneScore;
 }
 
 export function getTotalScore(
   playerId: number,
   allRounds: Map<number, Map<number, PlayerRoundScore>>,
-  round: number
+  round: number,
 ): number {
-  const roundScores = allRounds.get(round)
-  if (!roundScores) return 0
-  const score = roundScores.get(playerId)
-  return score ? calcRoundScore(round, score) : 0
+  const roundScores = allRounds.get(round);
+  if (!roundScores) return 0;
+  const score = roundScores.get(playerId);
+  return score ? calcRoundScore(round, score) : 0;
 }
 
 export function calcPlayerTotal(
   playerId: number,
-  allRounds: Map<number, Map<number, PlayerRoundScore>>
+  allRounds: Map<number, Map<number, PlayerRoundScore>>,
 ): number {
-  let total = 0
+  let total = 0;
   allRounds.forEach((_, round) => {
-    total += getTotalScore(playerId, allRounds, round)
-  })
-  return total
+    total += getTotalScore(playerId, allRounds, round);
+  });
+  return total;
 }
 
 export function getInitialScore(playerId: number): PlayerRoundScore {
@@ -53,5 +53,5 @@ export function getInitialScore(playerId: number): PlayerRoundScore {
     spirals: 0,
     crosses: 0,
     biggestZone: 0,
-  }
+  };
 }
