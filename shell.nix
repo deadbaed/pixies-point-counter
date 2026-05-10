@@ -10,7 +10,7 @@ pkgs.mkShellNoCC {
     nixfmt
 
     nodejs_24
-    pnpm
+    pnpm_10
     vtsls
   ];
 }
