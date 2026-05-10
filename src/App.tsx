@@ -5,11 +5,11 @@ import { RoundStart } from './components/RoundStart'
 import { RoundInput } from './components/RoundInput'
 import { RoundReview } from './components/RoundReview'
 import { GameResults } from './components/GameResults'
-import './style.css'
+import './index.css'
 
 export function App() {
   return (
-    <div class="app">
+    <div class="max-w-[500px] mx-auto p-5">
       <Switch>
         <Match when={game.phase === 'setup'}>
           <Setup />
