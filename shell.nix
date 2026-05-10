@@ -6,7 +6,7 @@
 pkgs.mkShellNoCC {
   packages = with pkgs; [
     npins
-    nil
+    nixd
     nixfmt
 
     nodejs_24
