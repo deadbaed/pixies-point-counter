@@ -121,8 +121,9 @@ export function confirmRound() {
     const nextRound = game.currentRound + 1;
     initRoundScores(nextRound);
     setGame("currentRound", nextRound);
-    // lastFinisherId stays - will be shown at start of next round
-    setGame("phase", "round-start");
+
+    // If the next round is the final one, do not show "round-start" and go straight to "round-input"
+    setGame("phase", nextRound === 3 ? "round-input" : "round-start");
   }
 }
 

@@ -16,7 +16,6 @@ export function RoundStart() {
         Round {game.currentRound} / 3
       </div>
 
-      <Show when={game.currentRound < 3}>
         <div>
           <h2 class="mb-5 text-[1.8rem] text-[#e94560]">Who finished last?</h2>
           <p class="mb-[15px] text-[#aaa]">This player will start round {game.currentRound + 1}</p>
@@ -33,20 +32,6 @@ export function RoundStart() {
             </For>
           </div>
         </div>
-      </Show>
-
-      <Show when={game.currentRound === 3}>
-        <div>
-          <h2 class="mb-[10px] text-[1.8rem] text-[#e94560]">Final Round!</h2>
-          <p class="mb-5 text-[#aaa]">Last chance to score points</p>
-          <button
-            class="cursor-pointer rounded-[10px] border-none bg-[#e94560] px-10 py-[15px] text-[1.1rem] font-bold text-white"
-            onClick={handleStartRound}
-          >
-            Start Entering Scores
-          </button>
-        </div>
-      </Show>
     </div>
   );
 }
