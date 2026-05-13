@@ -92,7 +92,7 @@ export function RoundInput() {
         {/* Cards */}
         <div class="mb-5">
           <label class="mb-[10px] block text-[#aaa]">Validated Cards</label>
-          <div class="grid grid-cols-5 gap-2">
+          <div class="grid grid-cols-3 gap-2">
             <For each={CARDS}>
               {(card) => (
                 <button
