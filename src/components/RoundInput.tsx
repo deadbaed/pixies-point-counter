@@ -31,13 +31,17 @@ export function RoundInput() {
     refresh();
   }
 
-  function updateSpirals(delta: number) {
-    updatePlayerScore(activePlayerId(), { spirals: Math.max(0, activeScore().spirals + delta) });
+  function updateSpirals(e: InputEvent) {
+    const input = e.currentTarget as HTMLInputElement;
+    const value = parseInt(input.value) || 0;
+    updatePlayerScore(activePlayerId(), { spirals: Math.max(0, value) });
     refresh();
   }
 
-  function updateCrosses(delta: number) {
-    updatePlayerScore(activePlayerId(), { crosses: Math.max(0, activeScore().crosses + delta) });
+  function updateCrosses(e: InputEvent) {
+    const input = e.currentTarget as HTMLInputElement;
+    const value = parseInt(input.value) || 0;
+    updatePlayerScore(activePlayerId(), { crosses: Math.max(0, value) });
     refresh();
   }
 
@@ -117,39 +121,27 @@ export function RoundInput() {
           <div class="flex items-center gap-[15px]">
             <div class="flex-1 rounded-lg bg-[#0f3460] p-[10px] text-center">
               <span class="mb-[5px] block text-[0.8rem] text-[#888]">Spirals</span>
-              <div class="flex items-center justify-center gap-[15px]">
-                <button
-                  class="h-[40px] w-[40px] cursor-pointer rounded-full border-none bg-[#0f3460] text-[1.5rem] text-white hover:bg-[#e94560]"
-                  onClick={() => updateSpirals(-1)}
-                >
-                  −
-                </button>
-                <span class="min-w-[50px] text-[1.8rem] font-bold">{activeScore().spirals}</span>
-                <button
-                  class="h-[40px] w-[40px] cursor-pointer rounded-full border-none bg-[#0f3460] text-[1.5rem] text-white hover:bg-[#e94560]"
-                  onClick={() => updateSpirals(1)}
-                >
-                  +
-                </button>
-              </div>
+              <input
+                type="number"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                min="0"
+                value={activeScore().spirals}
+                onInput={updateSpirals}
+                class="w-[80px] rounded-lg border-2 border-[#333] bg-[#0f3460] p-[10px] text-center text-[1.5rem] font-bold text-white focus:border-[#e94560] focus:outline-none"
+              />
             </div>
             <div class="flex-1 rounded-lg bg-[#0f3460] p-[10px] text-center">
               <span class="mb-[5px] block text-[0.8rem] text-[#888]">Crosses</span>
-              <div class="flex items-center justify-center gap-[15px]">
-                <button
-                  class="h-[40px] w-[40px] cursor-pointer rounded-full border-none bg-[#0f3460] text-[1.5rem] text-white hover:bg-[#e94560]"
-                  onClick={() => updateCrosses(-1)}
-                >
-                  −
-                </button>
-                <span class="min-w-[50px] text-[1.8rem] font-bold">{activeScore().crosses}</span>
-                <button
-                  class="h-[40px] w-[40px] cursor-pointer rounded-full border-none bg-[#0f3460] text-[1.5rem] text-white hover:bg-[#e94560]"
-                  onClick={() => updateCrosses(1)}
-                >
-                  +
-                </button>
-              </div>
+              <input
+                type="number"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                min="0"
+                value={activeScore().crosses}
+                onInput={updateCrosses}
+                class="w-[80px] rounded-lg border-2 border-[#333] bg-[#0f3460] p-[10px] text-center text-[1.5rem] font-bold text-white focus:border-[#e94560] focus:outline-none"
+              />
             </div>
             <span
               class={`rounded-lg bg-[#0f3460] p-[10px] text-[1rem] font-bold ${
@@ -168,10 +160,12 @@ export function RoundInput() {
           <div class="flex items-center gap-[15px]">
             <input
               type="number"
+              inputmode="numeric"
+              pattern="[0-9]*"
               min="0"
               value={activeScore().biggestZone}
               onInput={updateZone}
-              class="w-[100px] max-w-[100px] rounded-lg border-2 border-[#333] bg-[#0f3460] p-[10px] text-center text-[1.2rem] text-white focus:border-[#e94560] focus:outline-none"
+              class="w-[120px] rounded-lg border-2 border-[#333] bg-[#0f3460] p-[15px] text-center text-[1.5rem] font-bold text-white focus:border-[#e94560] focus:outline-none"
             />
             <span class="font-bold text-[#2ed573]">= {zonePreview()} pts</span>
           </div>
