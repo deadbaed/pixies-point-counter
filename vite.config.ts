@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: 'inline',
+      injectRegister: "inline",
       manifest: {
         name: "Pixies Point Counter",
         short_name: "Point Counter",
