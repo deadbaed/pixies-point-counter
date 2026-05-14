@@ -20,7 +20,7 @@ export function Setup() {
 
   return (
     <div class="text-center">
-      <h1 class="text-primary mb-2 text-3xl font-bold">Board Game Score Counter</h1>
+      <h1 class="text-primary mb-2 text-3xl font-bold">Pixies Game Score Counter</h1>
       <h2 class="text-muted mb-5 text-xl">Add Players (2-5)</h2>
 
       <div class="mb-5 flex gap-2">
