@@ -66,17 +66,17 @@ export function RoundInput() {
 
   return (
     <div>
-      <h3 class="mb-[15px] text-center">Round {game.currentRound} - Enter Scores</h3>
+      <h3 class="mb-4 text-center text-2xl font-bold">Round {game.currentRound} - Enter Scores</h3>
 
       {/* Player Tabs */}
-      <div class="mb-5 flex gap-[5px] overflow-x-auto">
+      <div class="mb-5 flex gap-1 overflow-x-auto">
         <For each={game.players}>
           {(player) => (
             <button
-              class={`min-w-[80px] flex-1 cursor-pointer rounded-lg p-3 text-[0.9rem] transition-all ${
+              class={`min-w-20 flex-1 cursor-pointer rounded-lg p-3 text-sm font-medium transition-all ${
                 activePlayerId() === player.id
-                  ? "border-2 border-[#e94560] bg-[#e94560] text-white"
-                  : "border-2 border-[#333] bg-[#16213e] text-[#aaa] hover:border-[#e94560]"
+                  ? "border-primary bg-primary text-text border-2"
+                  : "border-border bg-surface text-muted hover:border-primary border-2"
               }`}
               onClick={() => {
                 setActivePlayerId(player.id);
@@ -90,20 +90,22 @@ export function RoundInput() {
       </div>
 
       {/* Score Input for Active Player */}
-      <div class="rounded-[10px] bg-[#16213e] p-5">
-        <h4 class="mb-5 text-center text-[#e94560]">{activePlayer()?.name}'s Score</h4>
+      <div class="bg-surface rounded-xl p-5">
+        <h4 class="text-primary mb-5 text-center text-xl font-bold">
+          {activePlayer()?.name}'s Score
+        </h4>
 
         {/* Cards */}
         <div class="mb-5">
-          <label class="mb-[10px] block text-[#aaa]">Validated Cards</label>
+          <label class="text-muted mb-3 block">Validated Cards</label>
           <div class="grid grid-cols-3 gap-2">
             <For each={CARDS}>
               {(card) => (
                 <button
-                  class={`aspect-square cursor-pointer rounded-lg text-[1.2rem] font-bold transition-all ${
+                  class={`aspect-square cursor-pointer rounded-lg text-xl font-bold transition-all ${
                     isCardSelected(card)
-                      ? "border-2 border-[#e94560] bg-[#e94560] text-white"
-                      : "border-2 border-[#333] bg-[#0f3460] text-white hover:border-[#e94560]"
+                      ? "border-primary bg-primary text-text border-2"
+                      : "border-border bg-surface-raised text-text hover:border-primary border-2"
                   }`}
                   onClick={() => toggleCard(card)}
                 >
@@ -112,15 +114,15 @@ export function RoundInput() {
               )}
             </For>
           </div>
-          <span class="mt-[5px] block text-right text-[0.9rem] text-[#888]">Sum: {cardsSum()}</span>
+          <span class="text-muted-dim mt-1 block text-right text-sm">Sum: {cardsSum()}</span>
         </div>
 
         {/* Symbols */}
         <div class="mb-5">
-          <label class="mb-[10px] block text-[#aaa]">Symbols</label>
-          <div class="flex items-center gap-[15px]">
-            <div class="flex-1 rounded-lg bg-[#0f3460] p-[10px] text-center">
-              <span class="mb-[5px] block text-[0.8rem] text-[#888]">Spirals</span>
+          <label class="text-muted mb-3 block">Symbols</label>
+          <div class="flex items-center gap-4">
+            <div class="bg-surface-raised flex-1 rounded-lg p-3 text-center">
+              <span class="text-muted-dim mb-1 block text-sm">Spirals</span>
               <input
                 type="number"
                 inputmode="numeric"
@@ -128,11 +130,11 @@ export function RoundInput() {
                 min="0"
                 value={activeScore().spirals}
                 onInput={updateSpirals}
-                class="w-[80px] rounded-lg border-2 border-[#333] bg-[#0f3460] p-[10px] text-center text-[1.5rem] font-bold text-white focus:border-[#e94560] focus:outline-none"
+                class="border-border bg-surface-raised text-text focus:border-primary w-20 rounded-lg border-2 p-3 text-center text-2xl font-bold focus:outline-none"
               />
             </div>
-            <div class="flex-1 rounded-lg bg-[#0f3460] p-[10px] text-center">
-              <span class="mb-[5px] block text-[0.8rem] text-[#888]">Crosses</span>
+            <div class="bg-surface-raised flex-1 rounded-lg p-3 text-center">
+              <span class="text-muted-dim mb-1 block text-sm">Crosses</span>
               <input
                 type="number"
                 inputmode="numeric"
@@ -140,12 +142,12 @@ export function RoundInput() {
                 min="0"
                 value={activeScore().crosses}
                 onInput={updateCrosses}
-                class="w-[80px] rounded-lg border-2 border-[#333] bg-[#0f3460] p-[10px] text-center text-[1.5rem] font-bold text-white focus:border-[#e94560] focus:outline-none"
+                class="border-border bg-surface-raised text-text focus:border-primary w-20 rounded-lg border-2 p-3 text-center text-2xl font-bold focus:outline-none"
               />
             </div>
             <span
-              class={`rounded-lg bg-[#0f3460] p-[10px] text-[1rem] font-bold ${
-                symbolNet() >= 0 ? "text-[#2ed573]" : "text-[#ff4757]"
+              class={`bg-surface-raised rounded-lg p-3 text-lg font-bold ${
+                symbolNet() >= 0 ? "text-success" : "text-danger"
               }`}
             >
               Net: {symbolNet() >= 0 ? "+" : ""}
@@ -156,8 +158,8 @@ export function RoundInput() {
 
         {/* Zone */}
         <div class="mb-5">
-          <label class="mb-[10px] block text-[#aaa]">Biggest Zone (×{game.currentRound + 1})</label>
-          <div class="flex items-center gap-[15px]">
+          <label class="text-muted mb-3 block">Biggest Zone (×{game.currentRound + 1})</label>
+          <div class="flex items-center gap-4">
             <input
               type="number"
               inputmode="numeric"
@@ -165,22 +167,22 @@ export function RoundInput() {
               min="0"
               value={activeScore().biggestZone}
               onInput={updateZone}
-              class="w-[120px] rounded-lg border-2 border-[#333] bg-[#0f3460] p-[15px] text-center text-[1.5rem] font-bold text-white focus:border-[#e94560] focus:outline-none"
+              class="border-border bg-surface-raised text-text focus:border-primary w-28 rounded-lg border-2 p-4 text-center text-2xl font-bold focus:outline-none"
             />
-            <span class="font-bold text-[#2ed573]">= {zonePreview()} pts</span>
+            <span class="text-success font-bold">= {zonePreview()} pts</span>
           </div>
         </div>
       </div>
 
-      <div class="mt-5 flex gap-[10px]">
+      <div class="mt-5 flex gap-2">
         <button
-          class="flex-1 cursor-pointer rounded-[10px] border-none bg-[#333] p-[15px] text-[1rem] text-white transition-all hover:bg-[#444]"
+          class="bg-surface text-text hover:bg-surface-raised flex-1 cursor-pointer rounded-xl border-none p-4 text-lg transition-all"
           onClick={handleBack}
         >
           ← Back
         </button>
         <button
-          class="flex-2 cursor-pointer rounded-[10px] border-none bg-[#e94560] p-[15px] text-[1rem] font-bold text-white transition-all hover:bg-[#ff6b81]"
+          class="bg-primary text-text hover:bg-primary-light flex-2 cursor-pointer rounded-xl border-none p-4 text-lg font-bold transition-all"
           onClick={handleNext}
         >
           Review Scores →

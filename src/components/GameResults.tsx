@@ -33,19 +33,19 @@ export function GameResults() {
 
   return (
     <div class="text-center">
-      <h1 class="mb-[30px] text-[2rem] text-[#ffd700]">🏆 Game Over!</h1>
+      <h1 class="text-gold mb-8 text-4xl font-bold">🏆 Game Over!</h1>
 
-      <div class="mb-[30px] flex flex-col gap-[10px]">
+      <div class="mb-8 flex flex-col gap-2">
         <For each={sortedPlayers()}>
           {(player, index) => (
             <div
-              class={`flex items-center gap-[15px] rounded-[10px] bg-[#16213e] p-[15px] ${
+              class={`bg-surface flex items-center gap-4 rounded-xl p-4 ${
                 isWinner(player.id)
-                  ? "border-2 border-[#ffd700] bg-gradient-to-br from-[#0f3460] to-[#e94560]"
+                  ? "border-gold from-surface-raised to-primary border-2 bg-gradient-to-br"
                   : ""
               }`}
             >
-              <span class="text-[1.5rem]">
+              <span class="text-2xl">
                 {index() === 0
                   ? "🥇"
                   : index() === 1
@@ -54,25 +54,23 @@ export function GameResults() {
                       ? "🥉"
                       : `${index() + 1}.`}
               </span>
-              <span class="flex-1 text-left">{player.name}</span>
-              <span class="text-[1.2rem] font-bold text-[#2ed573]">
-                {getPlayerTotal(player.id)} pts
-              </span>
+              <span class="flex-1 text-left text-lg">{player.name}</span>
+              <span class="text-success text-xl font-bold">{getPlayerTotal(player.id)} pts</span>
             </div>
           )}
         </For>
       </div>
 
       <div>
-        <h2 class="mb-[15px] text-[#aaa]">Round Breakdown</h2>
+        <h2 class="text-muted mb-4 text-lg">Round Breakdown</h2>
         <For each={[1, 2, 3]}>
           {(round) => (
             <div class="mb-5">
-              <h3 class="mb-[10px] text-[#e94560]">Round {round}</h3>
-              <div class="flex flex-col gap-[5px]">
+              <h3 class="text-primary mb-2 text-lg font-bold">Round {round}</h3>
+              <div class="flex flex-col gap-1">
                 <For each={game.players}>
                   {(player) => (
-                    <div class="flex justify-between rounded-[5px] bg-[#16213e] p-[8px] px-[15px] text-[0.9rem]">
+                    <div class="bg-surface flex justify-between rounded-md p-2 px-4 text-sm">
                       <span>{player.name}</span>
                       <span>{getRoundScore(player.id, round)}</span>
                     </div>
@@ -85,7 +83,7 @@ export function GameResults() {
       </div>
 
       <button
-        class="mt-5 w-full cursor-pointer rounded-[10px] border-2 border-[#e94560] bg-[#0f3460] p-[15px] text-[1.1rem] font-bold text-[#e94560] transition-all hover:bg-[#e94560] hover:text-white"
+        class="border-primary bg-surface-raised text-primary hover:bg-primary hover:text-text mt-5 w-full cursor-pointer rounded-xl border-2 p-4 text-xl font-bold transition-all"
         onClick={handleNewGame}
       >
         Play Again

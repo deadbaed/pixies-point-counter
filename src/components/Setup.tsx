@@ -20,10 +20,10 @@ export function Setup() {
 
   return (
     <div class="text-center">
-      <h1 class="mb-[10px] text-[#e94560]">Board Game Score Counter</h1>
-      <h2 class="mb-5 text-[1.2rem] text-[#aaa]">Add Players (2-5)</h2>
+      <h1 class="text-primary mb-2 text-3xl font-bold">Board Game Score Counter</h1>
+      <h2 class="text-muted mb-5 text-xl">Add Players (2-5)</h2>
 
-      <div class="mb-5 flex gap-[10px]">
+      <div class="mb-5 flex gap-2">
         <input
           type="text"
           placeholder="Player name"
@@ -31,27 +31,27 @@ export function Setup() {
           onInput={(e) => setInputName(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
           maxLength={20}
-          class="flex-1 rounded-lg border-2 border-[#333] bg-[#16213e] p-3 text-[1rem] text-white focus:border-[#e94560] focus:outline-none"
+          class="border-border bg-surface text-text focus:border-primary flex-1 rounded-lg border-2 p-3 text-lg focus:outline-none"
         />
         <button
           onClick={handleAdd}
           disabled={game.players.length >= 5}
-          class="rounded-lg border-none bg-[#e94560] px-5 py-3 font-bold text-white disabled:cursor-not-allowed disabled:bg-[#555]"
+          class="bg-primary text-text disabled:bg-muted-dim rounded-lg border-none px-5 py-3 font-bold disabled:cursor-not-allowed"
         >
           Add
         </button>
       </div>
 
-      <div class="mb-5 flex flex-col gap-[10px]">
+      <div class="mb-5 flex flex-col gap-2">
         <For each={game.players}>
           {(player, index) => (
-            <div class="flex items-center gap-[10px] rounded-lg bg-[#16213e] p-3">
-              <span class="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#e94560] font-bold">
+            <div class="bg-surface flex items-center gap-2 rounded-lg p-3">
+              <span class="bg-primary text-text flex h-8 w-8 items-center justify-center rounded-full text-lg font-bold">
                 {index() + 1}
               </span>
-              <span class="flex-1 text-left">{player.name}</span>
+              <span class="flex-1 text-left text-lg">{player.name}</span>
               <button
-                class="h-[30px] w-[30px] cursor-pointer rounded-full border-none bg-[#ff4757] text-[1.2rem] text-white"
+                class="bg-danger text-text h-8 w-8 cursor-pointer rounded-full border-none text-xl"
                 onClick={() => removePlayer(player.id)}
               >
                 ×
@@ -61,10 +61,10 @@ export function Setup() {
         </For>
       </div>
 
-      <div class="mb-5 text-[#888]">{game.players.length} / 5 players</div>
+      <div class="text-muted-dim mb-5">{game.players.length} / 5 players</div>
 
       <button
-        class="w-full rounded-[10px] border-2 border-[#e94560] bg-[#0f3460] p-[15px] text-[1.1rem] font-bold text-[#e94560] transition-all hover:bg-[#e94560] hover:text-white disabled:cursor-not-allowed disabled:border-[#555] disabled:text-[#555]"
+        class="border-primary bg-surface-raised text-primary hover:bg-primary hover:text-text disabled:border-border disabled:text-muted-dim w-full rounded-xl border-2 p-4 text-xl font-bold transition-all disabled:cursor-not-allowed"
         onClick={startGame}
         disabled={!canStartGame()}
       >

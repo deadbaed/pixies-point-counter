@@ -9,7 +9,7 @@ import "./index.css";
 
 export function App() {
   return (
-    <div class="mx-auto max-w-[500px] p-5">
+    <div class="mx-auto max-w-md p-4">
       <Switch>
         <Match when={game.phase === "setup"}>
           <Setup />
