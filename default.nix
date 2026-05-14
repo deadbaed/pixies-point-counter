@@ -19,7 +19,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pkgs.fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-NWTF6wdh//mPSahZts5NdQHkwrYyXsSAI+ku6ug8++A=";
+    hash = "sha256-ygsEzXJM1GL2RSBOm9PvTCMBtBX3ZYzS568gCO+OJqQ=";
   };
 
   CI = true; # TODO: wait for https://github.com/pnpm/pnpm/pull/10634 to remove this env variable
